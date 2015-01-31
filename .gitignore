@@ -52,3 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# OAuth2 credentials
+client_secrets.json
+*_credentials_cache.json
