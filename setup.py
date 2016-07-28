@@ -9,7 +9,6 @@ setup(
 	packages = ['google'],
 	include_package_data = True,
 	install_requires = ['httplib2', 'gdata', 'google-api-python-client', 'oauth2client', 'simplejson',],
-	license='LICENSE.txt',
 	url = 'https://github.com/alexcchan/google/tree/master',
 	keywords = 'google api',
 	description = 'Google API Wrapper for Python',
