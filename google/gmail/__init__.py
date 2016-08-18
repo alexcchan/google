@@ -14,10 +14,10 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/gmail.modify'
 
 class GmailClient(object):
 
-    def __init__(self,argparser=None):
+    def __init__(self,argparser=None,client_args={}):
         """Initialize API client."""
         credentials = Credentials(name='gmail',scope=OAUTH_SCOPE,argparser=argparser).get()
-        self.service = build('gmail', 'v1', http=credentials.authorize(httplib2.Http()))
+        self.service = build('gmail', 'v1', http=credentials.authorize(httplib2.Http(**client_args)))
 
     def send_message(self,to,subject,body):
         """Send a message."""

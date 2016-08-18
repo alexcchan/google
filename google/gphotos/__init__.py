@@ -17,10 +17,10 @@ OAUTH_SCOPE = 'https://picasaweb.google.com/data/'
 
 class PhotosClient(object):
 
-    def __init__(self,argparser=None):
+    def __init__(self,argparser=None,client_args={}):
         """Initialize API client."""
         credentials = Credentials(name='photos',scope=OAUTH_SCOPE,argparser=argparser).get()
-        http_client = credentials.authorize(httplib2.Http())
+        http_client = credentials.authorize(httplib2.Http(**client_args))
         class Adapter(object):
             def __init__(self,http):
                 self.http = http

@@ -13,10 +13,10 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/calendar'
 
 class CalendarClient(object):
 
-    def __init__(self):
+    def __init__(self,argparser=None,client_args={}):
         """Initialize API client."""
-        credentials = Credentials(name='calendar',scope=OAUTH_SCOPE).get()
-        self.service = build(serviceName='calendar', version='v3', http=credentials.authorize(httplib2.Http()))
+        credentials = Credentials(name='calendar',scope=OAUTH_SCOPE,argparser=argparser).get()
+        self.service = build(serviceName='calendar', version='v3', http=credentials.authorize(httplib2.Http(**client_args)))
 
     def get_calendars(self,summary=None):
         """Get calendars (generator)."""

@@ -13,10 +13,10 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/drive'
 
 class DriveClient(object):
 
-    def __init__(self,argparser=None):
+    def __init__(self,argparser=None,client_args={}):
         """Initialize API client."""
         credentials = Credentials(name='drive',scope=OAUTH_SCOPE,argparser=argparser).get()
-        self.service = build('drive', 'v2', http=credentials.authorize(httplib2.Http()))
+        self.service = build('drive', 'v2', http=credentials.authorize(httplib2.Http(**client_args)))
 
     def get_file(self,file_name):
         """Get file(s) by remote name."""

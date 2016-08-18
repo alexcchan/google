@@ -26,9 +26,9 @@ class LanguageError(Exception):
 
 class LanguageClient(object):
 
-    def __init__(self):
+    def __init__(self,client_args={}):
         credentials = GoogleCredentials.get_application_default().create_scoped(OAUTH_SCOPE)
-        http = httplib2.Http()
+        http = httplib2.Http(**client_args)
         credentials.authorize(http)
         self.service = discovery.build('language','v1beta1',http=http,discoveryServiceUrl=DISCOVERY_URL)
 
