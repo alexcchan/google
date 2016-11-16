@@ -9,6 +9,7 @@ from timezones import PACIFIC
 
 
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/calendar'
+PACIFIC_TIME_ZONE = 'America/Los_Angeles'
 
 
 class CalendarClient(object):
@@ -51,9 +52,9 @@ class CalendarClient(object):
                     time_min = time_min.isoformat()
                 if isinstance(time_max,datetime):
                     time_max = time_max.isoformat()
-                events = self.service.events().list(calendarId=calendar_id,orderBy='startTime',singleEvents=True,timeMin=time_min,timeMax=time_max,pageToken=page_token).execute()
+                events = self.service.events().list(calendarId=calendar_id,orderBy='startTime',singleEvents=True,timeMin=time_min,timeMax=time_max,timeZone=PACIFIC_TIME_ZONE,pageToken=page_token).execute()
             else:
-                events = self.service.events().list(calendarId=calendar_id,pageToken=page_token).execute()
+                events = self.service.events().list(calendarId=calendar_id,timeZone=PACIFIC_TIME_ZONE,pageToken=page_token).execute()
             for event in events['items']:
                 if event.has_key('start'):
                     if event['start'].has_key('dateTime'):
