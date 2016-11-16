@@ -56,16 +56,30 @@ class CalendarClient(object):
             else:
                 events = self.service.events().list(calendarId=calendar_id,timeZone=PACIFIC_TIME_ZONE,pageToken=page_token).execute()
             for event in events['items']:
+                event_start_time = None
+                event_end_time = None
+                event_start_date = None
+                event_end_date = None
                 if event.has_key('start'):
                     if event['start'].has_key('dateTime'):
-                        event['start']['dateTimeObj'] = parse_datetime(event['start']['dateTime'])
+                        event_start_time = parse_datetime(event['start']['dateTime'])
+                        event['start']['dateTimeObj'] = event_start_time
                     if event['start'].has_key('date'):
-                        event['start']['dateObj'] = parse_date(event['start']['date'])
+                        event_start_date = parse_date(event['start']['date'])
+                        event['start']['dateObj'] = event_start_date
                 if event.has_key('end'):
                     if event['end'].has_key('dateTime'):
-                        event['end']['dateTimeObj'] = parse_datetime(event['end']['dateTime'])
+                        event_end_time = parse_datetime(event['end']['dateTime'])
+                        event['end']['dateTimeObj'] = event_end_time
                     if event['end'].has_key('date'):
-                        event['end']['dateObj'] = parse_date(event['end']['date'])
+                        event_end_date = parse_date(event['end']['date'])
+                        event['end']['dateObj'] = event_end_date
+                event_duration = None
+                if event_start_time is not None and event_end_time is not None:
+                    event_duration = event_end_time - event_start_time
+                elif event_start_date is not None and event_end_date is not None:
+                    event_duration = event_end_date - event_start_date
+                event['duration'] = event_duration
                 yield event
             page_token = events.get('nextPageToken')
             if not page_token:
