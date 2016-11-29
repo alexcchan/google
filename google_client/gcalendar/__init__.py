@@ -94,13 +94,15 @@ class CalendarClient(object):
         next_sunday = prev_sunday + timedelta(days=7*weeks)
         return self.get_events(calendar_id=calendar_id,time_min=midnight(prev_sunday),time_max=midnight(next_sunday))
 
-    def create_event(self,calendar_id,summary,start_time,end_time):
+    def create_event(self,calendar_id,summary,start_time,end_time,attendees=None):
         """Create a simple calendar event."""
         body={
             'summary': summary,
             'start': {'dateTime': start_time.isoformat()},
             'end': {'dateTime': end_time.isoformat()}
         }
+        if attendees is not None:
+            body['attendees'] = [{'email':attendee} for attendee in attendees]
         self.service.events().insert(calendarId=calendar_id,body=body).execute()
 
     def delete_event(self,calendar_id,event_id):
