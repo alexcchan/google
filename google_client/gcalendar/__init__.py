@@ -37,7 +37,7 @@ class CalendarClient(object):
             return calendar
         return None
 
-    def get_events(self,calendar_id,time_min=None,time_max=None):
+    def get_events(self,calendar_id,time_min=None,time_max=None,event_filter=None):
         """Get calendar events (generator)."""
         def parse_date(s):
             return datetime.strptime(s,'%Y-%m-%d')
@@ -56,6 +56,8 @@ class CalendarClient(object):
             else:
                 events = self.service.events().list(calendarId=calendar_id,timeZone=PACIFIC_TIME_ZONE,pageToken=page_token).execute()
             for event in events['items']:
+                if event_filter is not None and not event_filter(event):
+                    continue
                 event_start_time = None
                 event_end_time = None
                 event_start_date = None
@@ -84,6 +86,12 @@ class CalendarClient(object):
             page_token = events.get('nextPageToken')
             if not page_token:
                 break
+
+    def get_all_day_events(self,calendar_id,time_min=None,time_max=None):
+        """Get calendar all-day events (generator)."""
+        def event_filter(event):
+            return event.has_key('start') and event['start'].has_key('date')
+        return self.get_events(calendar_id,time_min,time_max,event_filter)
 
     def get_week_events(self,calendar_id,weeks=1):
         """Get calendar events for this week (generator)."""

@@ -33,11 +33,11 @@ class DriveClient(object):
                 break
         return result
 
-    def upload(self,file_name,mime_type,title=None,description=None):
+    def upload(self,file_name,mime_type,title=None,description=None,parent_ids=None):
         """Alias for upload_file."""
-        return self.upload_file(file_name,mime_type,title,description)
+        return self.upload_file(file_name,mime_type,title,description,parent_ids)
 
-    def upload_file(self,file_name,mime_type,title=None,description=None):
+    def upload_file(self,file_name,mime_type,title=None,description=None,parent_ids=None):
         """Upload a file by name."""
         if title is None:
             title = file_name
@@ -48,10 +48,15 @@ class DriveClient(object):
             'description': description,
             'mimeType': mime_type
         }
+        if parent_ids is not None:
+            if isinstance(parent_ids,list):
+                body['parents'] = [{'id':parent_id} for parent_id in parent_ids if isinstance(parent_id,basestring)]
+            elsif isinstance(parent_ids,basestring):
+                body['parents'] = [{'id':parent_ids}]
         media_body = MediaFileUpload(file_name, mimetype=mime_type)
         return self.service.files().insert(body=body, media_body=media_body, convert=True).execute()
 
-    def upload_string(self,contents,mime_type,title,description=None):
+    def upload_string(self,contents,mime_type,title,description=None,parent_ids=None):
         """Upload a string."""
         if description is None:
             description = title
@@ -60,5 +65,10 @@ class DriveClient(object):
             'description': description,
             'mimeType': mime_type
         }
+        if parent_ids is not None:
+            if isinstance(parent_ids,list):
+                body['parents'] = [{'id':parent_id} for parent_id in parent_ids if isinstance(parent_id,basestring)]
+            elsif isinstance(parent_ids,basestring):
+                body['parents'] = [{'id':parent_ids}]
         media_body = MediaIoBaseUpload(StringIO(contents),mimetype=mime_type)
         return self.service.files().insert(body=body, media_body=media_body, convert=True).execute()
