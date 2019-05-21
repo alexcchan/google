@@ -51,7 +51,7 @@ class DriveClient(object):
         if parent_ids is not None:
             if isinstance(parent_ids,list):
                 body['parents'] = [{'id':parent_id} for parent_id in parent_ids if isinstance(parent_id,basestring)]
-            elsif isinstance(parent_ids,basestring):
+            elif isinstance(parent_ids,basestring):
                 body['parents'] = [{'id':parent_ids}]
         media_body = MediaFileUpload(file_name, mimetype=mime_type)
         return self.service.files().insert(body=body, media_body=media_body, convert=True).execute()
@@ -68,7 +68,7 @@ class DriveClient(object):
         if parent_ids is not None:
             if isinstance(parent_ids,list):
                 body['parents'] = [{'id':parent_id} for parent_id in parent_ids if isinstance(parent_id,basestring)]
-            elsif isinstance(parent_ids,basestring):
+            elif isinstance(parent_ids,basestring):
                 body['parents'] = [{'id':parent_ids}]
         media_body = MediaIoBaseUpload(StringIO(contents),mimetype=mime_type)
         return self.service.files().insert(body=body, media_body=media_body, convert=True).execute()
